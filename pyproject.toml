@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "mongomon"
+version = "0.0.3"
+authors = ["Dotan Nahum <jondotan@gmail.com>"]
+description = "A profiler for Python and mongodb"
+
+license = "MIT"
+
+readme = "README.md"
+
+homepage = "https://github.com/jondot/mongomon"
+repository = "https://github.com/jondot/mongomon"
+documentation = "https://github.com/jondot/mongomon"
+
+keywords = ["pymongo", "mongo", "mongodb", "monitoring", "profiling"]
+
+[tool.poetry.dependencies]
+python = "*"
+toolz = "^0.9.0"
+pygments = "^2.3"
+six = "^1.12"
+colored = "^1.3"
+attr = "^0.3.1"
+pymongo = "^3.7"
+
+[tool.poetry.dev-dependencies]
+pytest = "^3.0"
+pytest-benchmark = "^3.1"
+pytest-testmon = "^0.9.13"
+pytest-watch = "^4.2"
+snapshottest = "^0.5.0"
+
+flake8 = { version = "^3.5", optional = true }
+flake8-mypy = { version = "^17.8", optional = true }
+
+[tool.poetry.extras]
+lint = ["flake8", "flake8-mypy"]
