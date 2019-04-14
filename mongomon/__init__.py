@@ -8,6 +8,7 @@ from pygments.formatters import TerminalFormatter
 from pprint import pformat
 import traceback
 from six import print_
+from .thread_local_store import set_thread_variable, get_thread_variable
 
 
 from pymongo import monitoring
@@ -59,6 +60,41 @@ class Config(object):
     print_fn = attrib(default=print_)
     # want shorter stack traces? customize this
     stack_preprocess = attrib(default=trim_last)
+
+
+CONTEXT_KEY = "mongomon-context"
+
+
+def start_context():
+    ctx = get_thread_variable(CONTEXT_KEY)
+    if ctx:
+        print("WARN: starting new context without finishing older one")
+
+    # set_thread_variable(CONTEXT_KEY, {})
+
+
+def end_context():
+    ctx = get_thread_variable(CONTEXT_KEY)
+    if ctx is None:
+        print("WARN: ending context that does not exist")
+    # set_thread_variable(CONTEXT_KEY, None)
+
+
+def get_context():
+    return get_thread_variable(CONTEXT_KEY)
+
+
+class MongomonWSGIMiddleware(object):
+    def __init__(self, app):
+        self.app = app
+
+    def __call__(self, environ, start_response):
+        start_context()
+        try:
+            res = self.app(environ, start_response)
+        finally:
+            end_context()
+            return res
 
 
 class Monitor(monitoring.CommandListener):

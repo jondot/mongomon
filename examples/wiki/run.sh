@@ -1,0 +1,1 @@
+MGMON=1 python wiki.py

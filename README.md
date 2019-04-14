@@ -13,11 +13,21 @@ Install using pip/pipenv/etc. (we recommend [poetry](https://github.com/sdispate
 $ poetry add mongomon --dev
 ```
 
-Initialize before you set up your MongoDB connection:
+Initialize *before* you set up your MongoDB connection:
 
 ```py
 from mongomon import Monitor, Config
 Monitor(Config(file_capture=".*/(wiki.*)")).monitor()
+```
+
+Actually, use an environment flag to guard against activating mongomon in production (unless this is something you want):
+
+```py
+from mongomon import Monitor, Config
+import os
+
+if os.getenv("MGMON"):
+    Monitor(Config(file_capture=".*/(wiki.*)", low_watermark_us=0)).monitor()
 ```
 
 Use `file_capture` to specify how to extract relevant project file paths from traces, rather than absolute file paths.

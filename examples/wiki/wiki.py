@@ -1,10 +1,12 @@
 from flask import Flask, redirect, render_template, request, url_for
 from flask_pymongo import PyMongo
-from mongomon import Monitor, Config
+from mongomon import Monitor, Config, MongomonWSGIMiddleware
 import markdown2
 import re
+import os
 
-Monitor(Config(file_capture=".*/(wiki.*)", low_watermark_us=0)).monitor()
+if os.getenv("MGMON"):
+    Monitor(Config(file_capture=".*/(wiki.*)", low_watermark_us=0)).monitor()
 
 app = Flask(__name__)
 mongo = PyMongo(app, "mongodb://localhost/wiki")
@@ -85,4 +87,5 @@ if __name__ == "__main__":
     import doctest
 
     doctest.testmod()
+    app.wsgi_app = MongomonWSGIMiddleware(app.wsgi_app)
     app.run(debug=True)

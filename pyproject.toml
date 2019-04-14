@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mongomon"
-version = "0.0.4"
+version = "0.0.5"
 authors = ["Dotan Nahum <jondotan@gmail.com>"]
 description = "A profiler for Python and mongodb"
 
